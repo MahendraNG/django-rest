@@ -13,11 +13,9 @@ class RegistrationSerializer(serializers.ModelSerializer):
         Registration of user and send activation link on user's email
     """
     password = serializers.CharField(style={'input_type': 'password'}, write_only=True)
-
     def create(self, validated_data):
         record = {}
         user = User(**validated_data)
-
         user.set_password(validated_data['password'])
         user.username = validated_data['email']
         user.is_active = False
@@ -28,7 +26,6 @@ class RegistrationSerializer(serializers.ModelSerializer):
                 key = str(access_token),
                 user_id = user.id
             )
-
         token.save()
         self.send_email(user_id, validated_data['email'], access_token)
         return user
@@ -57,3 +54,27 @@ class RegistrationSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ('id', 'email', 'password', 'first_name', 'last_name', 'is_active')
+
+
+class UserLoginSerializer(serializers.ModelSerializer):
+    email = serializers.EmailField(required=True, label="Email", allow_blank = False)
+    class Meta:
+        model = User
+        fields = ['email', 'password']
+        extra_kwargs = {"password":{"write_only":True}}
+    def validate(self, data):
+        user_obj = None
+        email = data.get("email", None)
+        password = data["password"]
+        if not email and not password:
+            raise serializers.ValidationError("Email required for login")
+        user = User.objects.filter(Q(email= email)).distinct()
+        if user.exists() and user.count()==1:
+            user_obj = user.first()
+        else :
+            raise serializers.ValidationError("This Email is not valid")
+        if user_obj:
+            if not user_obj.check_password(password):
+                raise serializers.ValidationError("Incorrect Email/Password")
+        data["Status"] = "You are logged in now..."
+        return data
