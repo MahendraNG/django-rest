@@ -23,7 +23,7 @@ SECRET_KEY = '2hd1h8aa*e=t@u4r&)wgox3hcoj(o1!b8o10=%nco4^cp(r3cs'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 # Application definition
 
@@ -34,10 +34,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'oauth2_provider',
-    'api',
     'rest_framework',
     'rest_framework.authtoken',
+    'oauth2_provider',
+    'api',
 ]
 
 MIDDLEWARE = [
@@ -82,6 +82,9 @@ DATABASES = {
 REST_FRAMEWORK = { 
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'oauth2_provider.ext.rest_framework.OAuth2Authentication', 
+        # 'rest_framework.authentication.SessionAuthentication',
+        # 'rest_framework.authentication.BasicAuthentication',
+        # 'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
     ), 
 } 
 
@@ -113,3 +116,13 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 
 STATIC_URL = '/static/'
+
+OAUTH2_PROVIDER = {
+    # this is the list of available scopes
+    'SCOPES': {
+        'read': 'Read scope',
+        'write': 'Write scope',
+    },
+    
+    # 'CLIENT_ID_GENERATOR_CLASS': {'oauth2_provider.generators.ClientIdGenerator',}
+}

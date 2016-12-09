@@ -18,9 +18,11 @@ from rest_framework import routers
 from django.conf.urls import url, include
 from rest_framework.authtoken import views
 from api import views
+from rest_framework_jwt.views import obtain_jwt_token
 
 urlpatterns = [
     url(r'^o/', include('oauth2_provider.urls', namespace='oauth2_provider')),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^sign_up/$', views.SignUp.as_view(), name="sign_up"),
+    url(r'^user_activation_link/(?P<user_id>(\w+))/(?P<token>([A-Za-z0-9]+)-([A-Za-z0-9]+)-([A-Za-z0-9]+)-([A-Za-z0-9]+)-([A-Za-z0-9]+))+/$', views.UserActivation.as_view(), name="user_activation_link"),
 ]
