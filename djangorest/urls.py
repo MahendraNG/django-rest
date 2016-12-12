@@ -25,6 +25,6 @@ urlpatterns = [
         views.UserActivation.as_view(), name="user_activation_link"),
     url(r'^login/$', views.UserAPILoginView.as_view(), name="login"),
     url(r'^users/$', views.UserList.as_view()),
-    url(r'^change-password/(?P<token>(\w+))/$',
+    url(r'^change-password/$',
         views.ChangePassword.as_view(), name='change-password'),
 ]

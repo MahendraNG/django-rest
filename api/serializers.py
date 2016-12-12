@@ -107,7 +107,8 @@ class ChangePasswordSerializer(serializers.Serializer):
     old_password = serializers.CharField(required=True)
     newpassword = serializers.CharField(required=True)
     confirm_password = serializers.CharField(required=True)
+    token = serializers.CharField(required=True)
 
     class Meta:
         model = User
-        fields = ('old_password', 'newpassword', 'confirm_password')
+        fields = ('old_password', 'newpassword', 'confirm_password', 'token')

@@ -78,7 +78,7 @@ class UserList(generics.ListCreateAPIView):
 
 
 class ChangePassword(generics.UpdateAPIView):
-    """Change password API."""
+    """ Change password API """
     queryset = User.objects.all()
     serializer_class = ChangePasswordSerializer
 
@@ -86,17 +86,25 @@ class ChangePassword(generics.UpdateAPIView):
         serializer = self.get_serializer(data=request.data)
 
         if serializer.is_valid():
-            access_token = kwargs['token']
+
             newpassword = request.data['newpassword']
+            access_token = request.data['token']
             confirm_password = request.data['confirm_password']
+
             if newpassword != confirm_password:
                 return Response({"confirm_password": ["Password not matches."]})
+
             token = AccessToken.objects.get(token=access_token)
             user_id = token.user_id
             user_detail = User.objects.get(id=user_id)
+
             if not user_detail.check_password(serializer.data.get("old_password")):
                 return Response({"old_password": ["Wrong password."]})
+
             # set_password also hashes the password that the user will get
             user_detail.set_password(serializer.data.get("newpassword"))
             user_detail.save()
             return Response("Success.")
+        else:
+            return Response(
+                "There is some fileds are missing, please try again!")
