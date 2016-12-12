@@ -78,3 +78,11 @@ class UserLoginSerializer(serializers.ModelSerializer):
                 raise serializers.ValidationError("Incorrect Email/Password")
         data["Status"] = "You are logged in now..."
         return data
+
+class UserSerializer(serializers.ModelSerializer):
+    """ Userlist serializer
+        show userlist
+    """
+    class Meta:
+        model = User
+        fields = ('email', 'first_name', 'last_name')

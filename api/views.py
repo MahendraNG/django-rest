@@ -7,7 +7,7 @@ from rest_framework.authtoken.models import Token
 from rest_framework import generics
 from api.permissions import IsAuthenticatedOrCreate
 
-from api.serializers import RegistrationSerializer, UserLoginSerializer
+from api.serializers import RegistrationSerializer, UserLoginSerializer, UserSerializer
 
 from oauth2_provider.ext.rest_framework import OAuth2Authentication, TokenHasScope
 from django.http import HttpResponse
@@ -67,3 +67,9 @@ class UserAPILoginView (APIView):
             new_data['scope'] = resp['scope']
             return Response(new_data, status=HTTP_200_OK)
         return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
+
+class UserList(generics.ListCreateAPIView):
+    queryset = User.objects.all()
+    required_scopes = ['read']
+    serializer_class = UserSerializer
+    permission_classes = [TokenHasScope]
