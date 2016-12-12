@@ -7,7 +7,12 @@ Once all dependancies installed you need to configure SMTP into the settings fil
 EMAIL_HOST_USER = ''  # Add smtp username
 EMAIL_HOST_PASSWORD = ''  # Add smtp password
 
+
+You need to create a Django superuser, once you done with that you need to navigate into admin section, and need to creat an application for OAuth2 to get CLIENT_ID and CLIENT_SECRET. and put this  CLIENT_ID and CLIENT_SECRET to settings file.
+
 These are the valid end point with CURL request that will work on terminal.
+
+
 
 
 To register a user:
