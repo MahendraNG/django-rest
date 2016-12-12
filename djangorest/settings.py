@@ -79,14 +79,14 @@ DATABASES = {
     }
 }
 
-REST_FRAMEWORK = { 
+REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'oauth2_provider.ext.rest_framework.OAuth2Authentication', 
+        'oauth2_provider.ext.rest_framework.OAuth2Authentication',
         # 'rest_framework.authentication.SessionAuthentication',
         # 'rest_framework.authentication.BasicAuthentication',
         # 'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
-    ), 
-} 
+    ),
+}
 
 # Password validation
 
@@ -123,11 +123,16 @@ OAUTH2_PROVIDER = {
         'read': 'Read scope',
         'write': 'Write scope',
     },
-    
-    # 'CLIENT_ID_GENERATOR_CLASS': {'oauth2_provider.generators.ClientIdGenerator',}
 }
 
 
 # SET CLIENT KEY AND CLIENT SECRET
 CLIENT_ID = 'MYvpz2loqH7OvDh3GFVGdzFU0vSxJEvKu6aj1vHK'
 CLIENT_SECRET = 'qX8MBN9axMhFkmocwS0OvDT9w808bFsnPv7A39XHTrINs5tOVjKVBU7IhBM0SlZ03eEV5bkhvgCzTP9InHhrNnrO9gCmGHXQVTAQiCxDShk8WUn7WqFOiT8KN4r3wXy1'
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = ''  # Add smtp username
+EMAIL_HOST_PASSWORD = ''  # Add smtp password
