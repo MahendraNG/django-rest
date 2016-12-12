@@ -5,6 +5,7 @@ from django.contrib.auth.hashers import make_password
 from django.core.mail import EmailMessage
 from django.core.mail import EmailMultiAlternatives
 from django.db.models import Q
+from oauth2_provider.models import AccessToken
 
 import uuid
 
@@ -20,6 +21,7 @@ class RegistrationSerializer(serializers.ModelSerializer):
         user.username = validated_data['email']
         user.is_active = False
         user.save()
+
         user_id = user.id
         access_token = uuid.uuid4()
         token = Token(
@@ -86,3 +88,14 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ('email', 'first_name', 'last_name')
+
+class ChangePasswordSerializer(serializers.Serializer):
+    """
+    Serializer for password change endpoint.
+    """
+    old_password = serializers.CharField(required=True)
+    newpassword = serializers.CharField(required=True)
+    confirm_password = serializers.CharField(required=True)
+    class Meta:
+        model = User
+        fields = ('old_password', 'newpassword', 'confirm_password')
