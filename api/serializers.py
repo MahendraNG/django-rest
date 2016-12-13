@@ -40,9 +40,10 @@ class RegistrationSerializer(serializers.ModelSerializer):
             errors['email'] = "Email can not be blank"
         elif User.objects.filter(email=data['email']):
             errors['email'] = "User already exist with this email."
-
+        elif not data.get('password'):
+            errors['email'] = "Please enter a valid password."
         if errors:
-            raise serializers.ValidationError(errors)
+            raise serializers.ValidationError({'message': errors['email'], 'data':data, 'error': "1"})
 
         return super(RegistrationSerializer, self).validate(data)
 
@@ -73,20 +74,26 @@ class UserLoginSerializer(serializers.ModelSerializer):
 
     def validate(self, data):
         user_obj = None
+        errors = {}
         email = data.get("email", None)
         password = data["password"]
+
         if not email and not password:
             raise serializers.ValidationError("Email required for login")
         user = User.objects.filter(Q(email=email)).distinct()
+
         if user.exists() and user.count() == 1:
             user_obj = user.first()
         else:
-            raise serializers.ValidationError("This Email is not valid")
+            errors['error'] = "This Email is not valid."
         if user_obj:
             if not user_obj.check_password(password):
-                raise serializers.ValidationError("Incorrect Email/Password")
-        data["Status"] = "You are logged in now..."
-        return data
+                errors['error'] = "Incorrect Email/Password"
+
+        if errors:
+            raise serializers.ValidationError({'error': "1", 'data': data, 'message': errors['error']})
+        else:
+            return data
 
 
 class UserSerializer(serializers.ModelSerializer):
